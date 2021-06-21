@@ -1,25 +1,40 @@
 #include "contact.h"
 #include "address_book.h"
+#include <boost/program_options.hpp>
+namespace po = boost::program_options;
 
-int main() {
+int main(int argc, char** argv) {
     string main_filename = "Address_Book.csv";
     address_book first_book(main_filename);
-    cout << "Loading contact list..." << endl;
     first_book.load();
-    cout << endl << "Show all contacts" << endl;
-    first_book.show_all();
-    cout << endl << "Adding new record" << endl;
-    first_book.add_contact();
-    cout << endl << "Show all contacts" << endl;
-    first_book.show_all();
-    cout << endl << "Try to find a record using substring. Enter your substring: " << endl;
-    string ss; getline( cin, ss);
-    if (!ss.empty()) first_book.filter(ss);
-    cout << "Edit record by id: " << endl;
-    first_book.edit("0");
-    cout << endl << "Let's find a birtday boys\\girls: " << endl;
-    first_book.find_bday();
-    cout << endl << "It's time for save all changes and exit" << endl;
-    first_book.save();
+    string sub_string;
+
+    po::options_description desc ("Allowed options");
+    desc.add_options ()
+        ("help,h", "print usage message")
+        ("show,s", "show all contacts")
+        ("filter,f", po::value(&sub_string), "filter by sub-string")
+        ("new,n", "Add new record with interactive input")
+        ("edit,e", "Edit record by unique id (3)")
+        ("bday,b", "Let's find a birtday boys\\girls :)");
+    po::variables_map vm;
+    po::store (po::command_line_parser (argc, argv).options (desc).run (), vm);
+    po::notify (vm);
+    if (vm.count("show")){
+        cout << endl << "Show all contacts" << endl;
+        first_book.show_all();
+    }
+    else if (vm.count("filter")) first_book.filter(sub_string);
+    else if (vm.count("new")) {
+        first_book.add_contact();
+        first_book.save();
+    }
+    else if (vm.count("edit")){
+        first_book.edit("3");
+        first_book.save();
+    }
+    else if (vm.count("bday")){
+        first_book.find_bday();
+    }
     return 0;
 }
