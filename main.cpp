@@ -6,7 +6,6 @@ namespace po = boost::program_options;
 int main(int argc, char** argv) {
     string main_filename = "Address_Book.csv";
     address_book first_book(main_filename);
-    first_book.load();
     string sub_string;
 
     po::options_description desc ("Allowed options");
@@ -23,18 +22,23 @@ int main(int argc, char** argv) {
     if (vm.count("show")){
         cout << endl << "Show all contacts" << endl;
         first_book.show_all();
-    }
-    else if (vm.count("filter")) first_book.filter(sub_string);
-    else if (vm.count("new")) {
+    } else if (vm.count("filter")) {
+        first_book.filter(sub_string);
+    } else if (vm.count("new")) {
         first_book.add_contact();
         first_book.save();
-    }
-    else if (vm.count("edit")){
+    } else if (vm.count("edit")) {
         first_book.edit("3");
         first_book.save();
-    }
-    else if (vm.count("bday")){
+    } else if (vm.count("bday")) {
         first_book.find_bday();
+    } else if(vm.count("help") || !vm.count("show") || !vm.count("filter") || !vm.count("new")
+               || !vm.count("edit") || !vm.count("bday")) {
+        cout << "USE: --show or -s to see all records in file;" << endl
+             << "-- filter or -f to filter records using substring;" << endl
+             << "--new or -n to add a record;" << endl
+             << "--edit or -e to edit a record;" << endl
+             << "--bday or -b to find a birthday person;" << endl;
     }
     return 0;
 }

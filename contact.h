@@ -1,6 +1,7 @@
 #ifndef CONTACT_H
 #define CONTACT_H
 
+#include <vector>
 #include <iostream>
 using namespace std;
 
@@ -10,6 +11,7 @@ public:
     contact(string id = "none", string f_name = "noname",
             string l_name = "noname", string bday = "none",
             string p_numb = "none", string email = "none");
+    contact(vector <string> params);
     contact(const contact &c);
     contact& operator= (const contact &c);
     string get_id() {return id;}

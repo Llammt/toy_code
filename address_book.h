@@ -1,20 +1,20 @@
 #ifndef ADDRESS_BOOK_H
 #define ADDRESS_BOOK_H
 
-#include <vector>
 #include <algorithm>
 #include <fstream>
 #include <sstream>
 #include <ctime>
-#include<stdio.h>
+//#include<stdio.h>
 #include <cstdio>
+#include <exception>
 #include "contact.h"
 
 class address_book
 {
 public:
     address_book(string filename);
-    void load();
+    int load();
     void add_contact();
     void add_contact(string f_name, string l_name = "noname",
                      string bday = "none", string p_numb = "none",
